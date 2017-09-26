@@ -39,6 +39,15 @@ declare global {
     }
 }
 
+export class Injector extends Component<{
+    render: (stores: any) => React.ReactElement<any>;
+}> {
+    static contextTypes = injectorContextTypes;
+    render() {
+        return this.props.render(this.context.mobxStores);
+    }
+}
+
 function createStoreInjector<P>(grabStoresFn, component: React.ComponentType<P>, injectNames?: string) {
     let displayName =
         "inject-" +
