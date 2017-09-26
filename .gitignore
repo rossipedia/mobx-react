@@ -20,3 +20,4 @@
 /test/browser/test_bundle.js
 /.source.*
 yarn-error.log
+/lib
