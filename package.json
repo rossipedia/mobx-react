@@ -63,7 +63,7 @@
     "tap-spec": "^4.1.1",
     "tape": "^4.2.2",
     "tape-run": "2.1.0",
-    "typescript": "~2.3.0"
+    "typescript": "^2.5.2"
   },
   "dependencies": {
     "hoist-non-react-statics": "^1.2.0"
