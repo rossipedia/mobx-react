@@ -1,7 +1,9 @@
-export default class EventEmitter {
-    listeners = []
+export type EventHandler = (...args:any[]) => void;
 
-    on(cb) {
+export default class EventEmitter {
+    private listeners:EventHandler[] = []
+
+    on(cb: EventHandler): () => void {
         this.listeners.push(cb)
         return () => {
             const index = this.listeners.indexOf(cb)
@@ -9,7 +11,7 @@ export default class EventEmitter {
         }
     }
 
-    emit(data) {
-        this.listeners.forEach(fn => fn(data))
+    emit(...args:any[]) {
+        this.listeners.forEach(fn => fn(...args))
     }
 }

@@ -33,7 +33,13 @@ const proxiedInjectorProps = {
 /**
  * Store Injection
  */
-function createStoreInjector(grabStoresFn, component, injectNames) {
+declare global {
+    interface Function {
+        name?: string;
+    }
+}
+
+function createStoreInjector<P>(grabStoresFn, component: React.ComponentType<P>, injectNames?: string) {
     let displayName =
         "inject-" +
         (component.displayName ||
@@ -42,8 +48,11 @@ function createStoreInjector(grabStoresFn, component, injectNames) {
             "Unknown")
     if (injectNames) displayName += "-with-" + injectNames
 
-    class Injector extends Component {
+    class Injector extends Component<P> {
         static displayName = displayName
+        static wrappedComponent: React.ComponentType<P>;
+
+        private wrappedInstance: React.ComponentType<P>;
 
         storeRef = instance => {
             this.wrappedInstance = instance
@@ -53,7 +62,7 @@ function createStoreInjector(grabStoresFn, component, injectNames) {
             // Optimization: it might be more efficient to apply the mapper function *outside* the render method
             // (if the mapper is a function), that could avoid expensive(?) re-rendering of the injector component
             // See this test: 'using a custom injector is not too reactive' in inject.js
-            let newProps = {}
+            let newProps = {} as any;
             for (let key in this.props)
                 if (this.props.hasOwnProperty(key)) {
                     newProps[key] = this.props[key]
